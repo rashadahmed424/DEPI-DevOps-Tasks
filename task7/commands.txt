@@ -1,0 +1,17 @@
+#first: create network for containers to communicate 
+docker network create pet-clinic 
+
+#create volume to attach it to myqsl container 
+docker volume create petdata
+
+#then build petclinic image from Dockerfile 
+docker build -t petclinicimage .
+
+#pull mysql image from dockerhub
+docker pull mysql
+
+#run mysql database container with environment variables
+docker run -d -p 3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_USER=petclinic -e MYSQL_PASSWORD=petclinic -e MYSQL_DATABASE=petclinic --network pet-clinic -v petdata:/var/lib/mysql --name sql-pet mysql 
+
+# run petclinic app container with environment variables
+docker run -d -p 9000:8080 -e SPRING_PROFILES_ACTIVE=mysql -e MYSQL_URL=jdbc:mysql://sql-pet:3306/petclinic -e MYSQL_USER=petclinic -e  MYSQL_PASSWORD=petclinic --network pet-clinic petclinicimage

@@ -27,7 +27,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - pet-data:/var/lib/pet-app-data
+      - pet-data:/var/lib/mysql
     networks:
       - pet-network
     healthcheck:

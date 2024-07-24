@@ -1,0 +1,35 @@
+services: 
+  pet-app:
+    environment:
+      - SPRING_PROFILES_ACTIVE=postgres
+      - POSTGRES_URL=jdbc:postgresql://postgresdb:5432/petclinic
+      - POSTGRES_USER=petclinic
+      - POSTGRES_PASSWORD=petclinic
+    networks:
+      - postgres-net
+    depends_on:
+      postgresdb:
+          condition: service_healthy
+
+  postgresdb:
+    image: postgres
+    environment:
+      - POSTGRES_ROOT_PASSWORD=root
+      - POSTGRES_PASSWORD=petclinic
+      - POSTGRES_USER=petclinic
+      - POSTGRES_DB=petclinic
+      
+    ports:
+      - "5432"
+    volumes: 
+      - postgres-vol:/var/lib/postgresql/data 
+    networks: 
+      - postgres-net
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-U petclinic"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+
+    

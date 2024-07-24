@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  pet-app:
+    build:
+      context: . 
+      target: dev
+    ports:
+      - "9000:8080" 
+
+volumes:
+  mysql-vol:
+  postgres-vol:  
+networks: 
+  mysql-net:
+  postgres-net: 
+    
+
+
+    

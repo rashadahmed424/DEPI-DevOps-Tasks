@@ -1,0 +1,36 @@
+services:
+  pet-app:
+    environment:
+      - SPRING_PROFILES_ACTIVE=mysql
+      - MYSQL_URL=jdbc:mysql://mysqldb:3306/petclinic
+      - MYSQL_USER=petclinic
+      - MYSQL_PASSWORD=petclinic
+
+    networks:
+      - mysql-net   
+    depends_on:
+      mysqldb:
+        condition: service_healthy 
+          
+  mysqldb:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=petclinic
+      - MYSQL_PASSWORD=petclinic
+      - MYSQL_DATABASE=petclinic
+
+    ports:
+      -  '3306'
+    volumes:
+      -  mysql-vol:/var/lib/mysql
+    networks:
+      -  mysql-net
+
+    healthcheck:
+      test: ["CMD","mysqladmin","ping","-h", "localhost"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+
+      

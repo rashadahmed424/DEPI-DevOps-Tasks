@@ -1,0 +1,52 @@
+def gv
+pipeline{
+    tools {
+        maven 'maven 3.9.8'
+    }
+    parameters{
+        booleanParam(name:'test', defaultValue:'true', description:'')
+    }
+    agent any
+
+    stages{
+        stage('script-load'){
+            steps{
+                script{
+                    gv=load "script.groovy"
+                }
+            }
+        }
+        
+        stage("build jar"){
+            steps{
+                script{
+                    gv.build_jar()
+                }
+                
+            }
+            }
+        
+        stage('test'){
+            when{
+               expression{
+                    params.test
+               }
+            }
+            steps{
+                script{
+                    gv.test()
+                }
+            }
+        }
+
+        stage('build&push image'){
+            steps{
+                script{
+                   gv.build_image()
+                }
+            }
+
+        }
+    }
+}
+    

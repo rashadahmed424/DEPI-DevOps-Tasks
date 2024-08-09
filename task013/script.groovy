@@ -11,9 +11,9 @@ def test(){
 def build_image(){
     withCredentials([ usernamePassword(credentialsId: 'dockerhub-conn', usernameVariable: 'USER', passwordVariable: 'PASS')])
         {
-            sh "docker build -t rashadahmed424/spring-pet-app:BUILD_NUMBER ."
+            sh "docker build -t rashadahmed424/spring-pet-app:${BUILD_NUMBER} ."
             sh "echo $PASS | docker login -u ${USER} --password-stdin"
-            sh "docker push rashadahmed424/spring-pet-app:BUILD_NUMBER"
+            sh "docker push rashadahmed424/spring-pet-app:${BUILD_NUMBER}"
         }
 
 }

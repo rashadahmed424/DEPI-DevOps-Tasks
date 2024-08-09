@@ -13,7 +13,7 @@ def build_image(){
         {
             sh "docker build -t rashadahmed424/spring-pet-app:BUILD_NUMBER ."
             sh "echo $PASS | docker login -u ${USER} --password-stdin"
-            sh "docker push rashadahmed424/spring-pet-app:v2.0"
+            sh "docker push rashadahmed424/spring-pet-app:BUILD_NUMBER"
         }
 
 }

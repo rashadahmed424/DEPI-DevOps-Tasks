@@ -1,0 +1,19 @@
+---
+- hosts: all
+  remote_user: ec2-user
+  become: yes
+  vars: 
+    dir_name: test
+  tasks:
+    - name: Update yum cache
+      yum:
+        update_cache: yes
+
+    - name: Install nginx
+      yum:
+        name: nginx
+        state: latest
+    - name: create directory
+      file:
+        path: "{{dir_name}}"
+        state: directory
